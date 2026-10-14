@@ -1,0 +1,131 @@
+{
+  "variables_esperadas": [
+    "horas_estudio_extra", "horas_trabajo_semanal", "horas_sueno", "asistencia_clases",
+    "comprension_clase", "bloqueo_examenes", "metodo_estudio", "tipo_materia_reprobada",
+    "entrega_trabajos", "entorno_estudio", "consulta_dudas", "trabajo_equipo",
+    "nivel_motivacion", "dominio_prerrequisitos", "uso_herramientas_ia", "revision_errores",
+    "estabilidad_financiera", "tiempo_transporte"
+  ],
+  "reglas": [
+    {
+      "id": "R01_A",
+      "cluster": "Gestión de Tiempo y Entorno",
+      "nombre": "Burnout Crítico por Entorno Hostil",
+      "condiciones": { "horas_trabajo_semanal": ">=40", "horas_sueno": "<5", "tiempo_transporte": ">2" },
+      "conclusion": "Agotamiento extremo. El estudiante pasa más de 60 horas a la semana entre trabajo y transporte, haciendo biológicamente imposible la retención de memoria.",
+      "recomendacion": "Reducción drástica de carga. Inscribir máximo 2 materias el próximo ciclo. Priorizar materias virtuales si están disponibles."
+    },
+    {
+      "id": "R01_B",
+      "cluster": "Gestión de Tiempo y Entorno",
+      "nombre": "Fricción por Tiempos de Traslado",
+      "condiciones": { "horas_trabajo_semanal": "0", "tiempo_transporte": ">3", "asistencia_clases": "irregular" },
+      "conclusion": "El desgaste físico no proviene del trabajo, sino del desplazamiento geográfico hacia la universidad, provocando ausentismo intermitente.",
+      "recomendacion": "Agrupar materias en bloques de días específicos para reducir la cantidad de viajes semanales a la institución."
+    },
+    {
+      "id": "R01_C",
+      "cluster": "Gestión de Tiempo y Entorno",
+      "nombre": "Procrastinación por Ilusión de Tiempo Libre",
+      "condiciones": { "horas_trabajo_semanal": "0", "horas_estudio_extra": "<5", "entrega_trabajos": "tardios" },
+      "conclusion": "Ley de Parkinson: el estudiante tiene todo el día libre, por lo que expande sus tareas indefinidamente hasta la fecha límite.",
+      "recomendacion": "Implementar un horario de 'oficina académica' estricto de 8:00 AM a 1:00 PM como si fuera un empleo remunerado."
+    },
+    {
+      "id": "R02_A",
+      "cluster": "Metodología y Técnicas de Estudio",
+      "nombre": "Ineficiencia en Ciencias Exactas (Nivel 1)",
+      "condiciones": { "tipo_materia_reprobada": "matematicas", "metodo_estudio": "lectura_memorizacion", "comprension_clase": "media" },
+      "conclusion": "Intento de asimilar matemáticas mediante lectura de fórmulas sin ejecución práctica.",
+      "recomendacion": "Transición a aprendizaje basado en problemas. Resolver 10 ejercicios diarios sin ver la solución."
+    },
+    {
+      "id": "R02_B",
+      "cluster": "Metodología y Técnicas de Estudio",
+      "nombre": "Ineficiencia en Programación (Nivel 1)",
+      "condiciones": { "tipo_materia_reprobada": "programacion", "metodo_estudio": "lectura_memorizacion", "comprension_clase": "media" },
+      "conclusion": "Intento de aprender código leyendo documentación o viendo videos sin teclear la sintaxis.",
+      "recomendacion": "Construir proyectos pequeños. La programación es memoria muscular y lógica algorítmica; requiere codificación manual constante."
+    },
+    {
+      "id": "R02_C",
+      "cluster": "Metodología y Técnicas de Estudio",
+      "nombre": "Síndrome de la Ilusión de Competencia por IA",
+      "condiciones": { "uso_herramientas_ia": "alto", "bloqueo_examenes": "si", "entrega_trabajos": "a_tiempo" },
+      "conclusion": "El estudiante delega la resolución de problemas a herramientas de IA, obteniendo buenas notas en tareas pero fallando catastróficamente en exámenes presenciales.",
+      "recomendacion": "Usar la IA como tutor (explicación de conceptos), no como generador de código o respuestas finales. Reducir su uso 2 semanas antes de parciales."
+    },
+    {
+      "id": "R03_A",
+      "cluster": "Brechas de Conocimiento y Base Técnica",
+      "nombre": "Colapso por Deuda Técnica Acumulada",
+      "condiciones": { "dominio_prerrequisitos": "bajo", "horas_estudio_extra": ">15", "asistencia_clases": "alta" },
+      "conclusion": "El estudiante se esfuerza al máximo pero reprueba porque no domina los fundamentos que la materia actual asume como sabidos.",
+      "recomendacion": "Retroceder un paso. Si es cálculo avanzado, repasar álgebra. Si es backend complejo, repasar bases de datos relacionales."
+    },
+    {
+      "id": "R03_B",
+      "cluster": "Brechas de Conocimiento y Base Técnica",
+      "nombre": "Negligencia en Revisión de Errores",
+      "condiciones": { "revision_errores": "nunca", "tipo_materia_reprobada": "cualquiera", "comprension_clase": "baja" },
+      "conclusion": "El estudiante recibe exámenes y proyectos calificados pero solo revisa la nota final, ignorando el feedback.",
+      "recomendacion": "El aprendizaje ocurre al corregir. Obligatorio programar tutorías con el docente específicamente para resolver los exámenes reprobados."
+    },
+    {
+      "id": "R04_A",
+      "cluster": "Dinámicas de Grupo y Proyectos",
+      "nombre": "Liderazgo Tóxico o Micro-management",
+      "condiciones": { "trabajo_equipo": "asume_toda_carga", "entrega_trabajos": "a_tiempo", "horas_sueno": "<5" },
+      "conclusion": "El estudiante no confía en su equipo, asume todo el trabajo de desarrollo o investigación y sacrifica su propio rendimiento global.",
+      "recomendacion": "Aprender a delegar y aceptar imperfecciones. Utilizar control de versiones (Git) o tableros Kanban para asignar responsabilidad auditable a cada miembro."
+    },
+    {
+      "id": "R04_B",
+      "cluster": "Dinámicas de Grupo y Proyectos",
+      "nombre": "Aislamiento por Fricción Social",
+      "condiciones": { "trabajo_equipo": "conflictivo", "consulta_dudas": "nunca", "entrega_trabajos": "incompletos_por_tiempo" },
+      "conclusion": "La incapacidad para coordinar esfuerzos con pares resulta en entregas fragmentadas o módulos de software/proyectos que no se integran.",
+      "recomendacion": "Establecer actas de reunión y división de interfaces claras desde el día 1 del proyecto. Separar lo personal de lo profesional."
+    },
+    {
+      "id": "R05_A",
+      "cluster": "Factores Psicológicos y Motivacionales",
+      "nombre": "Ansiedad Paralizante de Rendimiento",
+      "condiciones": { "bloqueo_examenes": "si", "comprension_clase": "alta", "horas_estudio_extra": ">10" },
+      "conclusion": "Pánico escénico académico. El cerebro entra en modo 'lucha o huida' durante la evaluación, bloqueando el acceso a la memoria a largo plazo.",
+      "recomendacion": "Terapia de desensibilización sistemática. Simular exámenes con cronómetro en la biblioteca, no en la comodidad de la habitación."
+    },
+    {
+      "id": "R05_B",
+      "cluster": "Factores Psicológicos y Motivacionales",
+      "nombre": "Depresión o Apatía Académica Grave",
+      "condiciones": { "nivel_motivacion": "nula", "asistencia_clases": "baja", "entorno_estudio": "cama_o_habitacion" },
+      "conclusion": "Síntomas de anhedonia. La bajada de notas es solo un síntoma de un problema anímico subyacente severo.",
+      "recomendacion": "Derivación inmediata a la clínica psicológica de la universidad. Pausar exigencias académicas hasta estabilizar la salud mental."
+    },
+    {
+      "id": "R06_A",
+      "cluster": "Problemas Socioeconómicos",
+      "nombre": "Inestabilidad Financiera Aguda",
+      "condiciones": { "estabilidad_financiera": "precaria", "horas_trabajo_semanal": ">30", "nivel_motivacion": "alta" },
+      "conclusion": "El estudiante desea estudiar, pero la presión económica obliga a priorizar turnos laborales sobre entregas académicas.",
+      "recomendacion": "Acudir a bienestar estudiantil para gestionar prórrogas oficiales, buscar becas internas o considerar trabajos dentro del campus con horarios flexibles."
+    },
+    {
+      "id": "R07_A",
+      "cluster": "Mala Interpretación de Criterios",
+      "nombre": "Desviación de la Rúbrica (Over-engineering)",
+      "condiciones": { "entrega_trabajos": "incompletos_por_tiempo", "comprension_clase": "alta", "tipo_materia_reprobada": "proyectos_desarrollo" },
+      "conclusion": "Pérdida de tiempo implementando características complejas o estéticas que no estaban en los requerimientos del docente.",
+      "recomendacion": "Apego estricto al Producto Mínimo Viable (MVP). Construir primero lo que vale el 80% de la nota, añadir detalles solo si sobra tiempo."
+    },
+    {
+      "id": "R08_A",
+      "cluster": "Deficiencias de Entorno Físico",
+      "nombre": "Fragmentación de Atención",
+      "condiciones": { "entorno_estudio": "ruidoso_o_compartido", "horas_estudio_extra": ">15", "comprension_clase": "baja" },
+      "conclusion": "Estudio superficial prolongado. 15 horas en un entorno con interrupciones equivalen a 2 horas de estudio profundo real.",
+      "recomendacion": "Trasladar las sesiones de estudio pesado a la biblioteca de la universidad o usar auriculares con cancelación de ruido y técnica Pomodoro."
+    }
+  ]
+}
