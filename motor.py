@@ -116,6 +116,7 @@ class MotorInferencia:
             if cumplida:
                 diagnosticos.append({
                     "id_regla": regla["id"],
+                    "cluster": regla.get("cluster", "General"),
                     "nombre": regla.get("nombre", "Diagnóstico general"),
                     "conclusion": regla["conclusion"],
                     "recomendacion": regla["recomendacion"],
