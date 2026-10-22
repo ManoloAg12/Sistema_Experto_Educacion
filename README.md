@@ -1,45 +1,39 @@
-# Sistema Experto Educativo
+# OrientaU · Sistema Experto Educativo
 
-## 📖 ¿Qué es este proyecto?
-<!-- Describe aquí tu proyecto en un par de líneas. -->
-Este es un sistema experto basado en reglas, desarrollado en Python y enfocado en el área de educación. Su objetivo principal es [EJEMPLO: orientar a los estudiantes sobre su estilo de aprendizaje / ayudar a los docentes a detectar dificultades de aprendizaje / recomendar planes de estudio]. 
+Portal web en Python que orienta a estudiantes universitarios sobre factores que pueden afectar su rendimiento académico. Analiza tiempo, hábitos de estudio, evaluación, entorno y apoyo académico para ofrecer recomendaciones trazables y accionables.
 
-## 🧠 ¿Quién es el experto?
-<!-- Detalla de dónde se extrajo la información para la base de conocimiento. -->
-El conocimiento codificado en este sistema proviene de [EJEMPLO: entrevistas realizadas a docentes especialistas en psicopedagogía / un experto en currículo educativo]. Los detalles del proceso de extracción de conocimiento se encuentran en `docs/entrevista.md`.
+## Finalidad y alcance
 
-## 📂 Estructura del Proyecto
-El repositorio sigue la siguiente estructura modular:
-* `main.py`: Punto de entrada de la aplicación.
-* `motor.py`: Motor de inferencia encargado de evaluar las reglas.
-* `interfaz.py`: Gestiona las preguntas y respuestas en la terminal.
-* `explicacion.py`: Módulo que responde al usuario la pregunta "¿por qué?" justificando las decisiones.
-* `conocimiento/reglas.json`: Archivo que almacena la base de conocimiento.
-* `docs/`: Carpeta con toda la documentación, validaciones y diseño del árbol de decisión.
+OrientaU no etiqueta ni diagnostica condiciones clínicas. Apoya la reflexión académica mediante reglas de conocimiento y alertas preventivas; no sustituye atención psicológica, médica, docente o institucional. Las respuestas se procesan localmente y no se guardan automáticamente.
 
-## ⚙️ Cómo se ejecuta
+## Ejecución
 
-### Requisitos previos
-* Python 3 instalado en el sistema.
+Requiere Python 3.10+ y Flask.
 
-### Instalación y ejecución
-1. Clona este repositorio en tu máquina local:
-   ```bash
-   git clone <AQUI_TU_ENLACE_DE_GITHUB>
-   cd sistema_experto_educacion
-   ```
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python app.py
+```
 
-2. Crea y activa un entorno virtual (recomendado):
-   ```bash
-   python3 -m venv env
-   source env/bin/activate  # Para macOS/Linux
-   # En Windows usa: env\Scripts\activate
-   ```
+Abre `http://127.0.0.1:5000` en el navegador. Tailwind CSS se carga desde CDN, por lo que la primera carga requiere conexión a internet.
 
-3. Ejecuta el sistema:
-   ```bash
-   python3 main.py
-   ```
+```bash
+python3 main.py
+```
 
-## 🤖 Bitácora de Inteligencia Artificial
-El proceso de desarrollo de este software fue asistido por Inteligencia Artificial. Todos los prompts y usos registrados se encuentran documentados en `docs/bitacora_ia.md`.
+La versión de consola original continúa disponible.
+
+## Arquitectura
+
+- `app.py`: servidor Flask y recepción/validación del cuestionario.
+- `templates/`: portal web con Tailwind CSS y panel de resultados.
+- `cuestionario.py`: preguntas y opciones.
+- `motor.py`: motor de inferencia de reglas exactas.
+- `evaluacion.py`: prioriza reglas y crea alertas preventivas con evidencia.
+- `conocimiento/reglas.json`: base de conocimiento editable.
+- `tests/test_reglas.py`: pruebas automatizadas.
+
+## Comprobación manual
+
+Inicia el servidor, completa el cuestionario y confirma que se muestran el índice orientativo, las señales, los hallazgos y las recomendaciones. El texto libre solo reconoce algunas menciones explícitas y las reporta como contexto; no cambia el puntaje ni las reglas.
