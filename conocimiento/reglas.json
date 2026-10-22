@@ -17,7 +17,9 @@
     "uso_herramientas_ia",
     "revision_errores",
     "estabilidad_financiera",
-    "tiempo_transporte"
+    "tiempo_transporte",
+    "sin_internet",
+    "otros_con_internet"
   ],
   "reglas": [
     {
@@ -198,6 +200,17 @@
       },
       "conclusion": "La combinacion de muchas horas de estudio, un entorno con interrupciones y baja comprension declarada sugiere que conviene revisar la calidad de las sesiones de estudio.",
       "recomendacion": "Probar sesiones cortas en un lugar tranquilo, reducir las interrupciones y evaluar la comprension mediante preguntas o ejercicios al finalizar cada sesion."
+    },
+    {
+      "id": "R08_B",
+      "cluster": "Conectividad",
+      "nombre": "Problema de conexión general",
+      "condiciones": {
+        "sin_internet": true,
+        "otros_con_internet": false
+      },
+      "conclusion": "Posible problema de conexión general en el equipo del estudiante.",
+      "recomendacion": "Revisar el router, el proveedor de internet o la configuración de red local."
     }
   ]
 }

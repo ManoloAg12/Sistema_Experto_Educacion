@@ -1,12 +1,446 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OrientaU · Orientación académica</title><script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config={theme:{extend:{colors:{ink:'#172c3b',mint:'#c9f2df',leaf:'#147d62'}}}}</script>
-<style>@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}.rise{animation:rise .55s ease-out both}html{scroll-behavior:smooth}</style></head>
-<body class="bg-[#f5f8f7] text-ink antialiased"><header class="border-b border-slate-200 bg-white"><div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-5"><a href="/" class="text-2xl font-black tracking-tight">Orienta<span class="text-leaf">U</span></a><span class="text-sm text-slate-500">Orientación académica personal</span></div></header>
-<main class="mx-auto max-w-6xl px-5 py-10 md:py-16"><section class="rise grid gap-10 rounded-[2rem] bg-ink px-7 py-10 text-white md:grid-cols-[1.1fr_.9fr] md:px-12 md:py-14"><div><p class="mb-4 inline-flex rounded-full bg-white/10 px-4 py-2 text-sm text-mint">Una pausa para entender cómo vas</p><h1 class="max-w-2xl text-4xl font-black leading-tight md:text-5xl">Tu bienestar académico también se puede planificar.</h1><p class="mt-5 max-w-xl leading-7 text-slate-300">Responde con honestidad. Revisaremos hábitos, tiempo, aprendizaje y entorno para darte recomendaciones concretas y señales tempranas.</p><a href="#evaluacion" class="mt-8 inline-flex rounded-xl bg-mint px-6 py-3 font-bold text-ink transition hover:-translate-y-0.5 hover:bg-white">Comenzar evaluación <span class="ml-2">↓</span></a></div><div class="flex items-center"><div class="w-full rounded-3xl border border-white/10 bg-white/5 p-6"><p class="text-sm font-semibold text-mint">¿Qué recibirás?</p><div class="mt-5 space-y-4"><div class="flex gap-3"><span class="text-mint">01</span><p>Un resumen visual de tus señales actuales.</p></div><div class="flex gap-3"><span class="text-mint">02</span><p>Hallazgos con evidencia y pasos prácticos.</p></div><div class="flex gap-3"><span class="text-mint">03</span><p>Una estimación orientativa para priorizar acciones.</p></div></div><p class="mt-6 border-t border-white/10 pt-4 text-xs leading-5 text-slate-400">Tus respuestas se procesan para mostrar el resultado y no se guardan en una base de datos.</p></div></div></section>
-<section id="evaluacion" class="pt-14"><div class="mb-8 flex items-end justify-between gap-4"><div><p class="text-sm font-bold uppercase tracking-widest text-leaf">Evaluación</p><h2 class="mt-2 text-3xl font-black">Cuéntanos sobre tu situación</h2><p class="mt-2 text-slate-600">Completa todos los campos. Puedes añadir contexto al final.</p></div><span class="hidden rounded-full bg-white px-4 py-2 text-sm text-slate-500 shadow-sm md:block">4 secciones · 18 preguntas</span></div>
-{% if errores %}<div class="mb-6 rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-800"><strong>Hay respuestas por revisar:</strong><ul class="mt-2 list-inside list-disc">{% for error in errores %}<li>{{ error }}</li>{% endfor %}</ul></div>{% endif %}
-<form method="post" class="space-y-6" novalidate>{% for nombre,preguntas in secciones %}<fieldset class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8"><legend class="px-2 text-xl font-extrabold">{{ loop.index }}. {{ nombre }}</legend><div class="grid gap-x-8 gap-y-7 md:grid-cols-2">{% for clave,pregunta,tipo,datos,ayuda in preguntas %}<div><label class="block font-bold" for="{{ clave }}">{{ pregunta }} <span class="text-red-500">*</span></label>{% if ayuda %}<p class="mt-1 text-sm text-slate-500">{{ ayuda }}</p>{% endif %}{% if tipo == 'numero' %}<input id="{{ clave }}" name="{{ clave }}" type="number" step="any" min="{{ datos[0] }}" max="{{ datos[1] }}" required value="{{ valores.get(clave,'') if valores else '' }}" placeholder="Ingresa un número" class="mt-3 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-leaf focus:ring-4 focus:ring-emerald-100">{% else %}<div class="mt-3 space-y-2">{% for texto,valor in datos %}<label class="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 px-4 py-3 transition hover:border-leaf hover:bg-emerald-50"><input type="radio" name="{{ clave }}" value="{{ valor }}" required {% if valores and valores.get(clave)==valor %}checked{% endif %} class="h-4 w-4 accent-[#147d62]"><span>{{ texto }}</span></label>{% endfor %}</div>{% endif %}</div>{% endfor %}</div></fieldset>{% endfor %}
-<section class="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8"><label for="comentario" class="text-xl font-extrabold">¿Algo más que debamos considerar?</label><p class="mt-2 text-slate-600">Puedes describir una dificultad o circunstancia. El sistema buscará menciones directas como falta de tiempo, problemas de descanso o dudas sobre un tema, y te mostrará qué detectó.</p><textarea id="comentario" name="comentario" maxlength="2000" rows="4" placeholder="Escribe aquí si lo deseas…" class="mt-4 w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 outline-none transition focus:border-leaf focus:ring-4 focus:ring-emerald-100">{{ valores.get('comentario','') if valores else '' }}</textarea><p class="mt-2 text-xs text-slate-500">Opcional · máximo 2,000 caracteres. El texto es un complemento contextual, no cambia las reglas automáticas.</p></section>
-<div class="flex flex-col items-center justify-between gap-4 rounded-3xl bg-mint/60 p-6 md:flex-row"><p class="max-w-2xl text-sm leading-6 text-slate-700">OrientaU ofrece orientación académica, no predice con certeza si aprobarás o reprobarás ni reemplaza apoyo docente o profesional.</p><button class="shrink-0 rounded-xl bg-leaf px-7 py-4 font-bold text-white shadow-lg shadow-emerald-900/15 transition hover:-translate-y-0.5 hover:bg-emerald-800" type="submit">Ver mi orientación <span class="ml-2">→</span></button></div></form></section></main><footer class="border-t border-slate-200 bg-white py-7 text-center text-sm text-slate-500">OrientaU · Sistema experto de orientación académica</footer></body></html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OrientaU · Orientación académica</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#172c3b',
+            ink2: '#1f3a4d',
+            mint: '#c9f2df',
+            leaf: '#147d62',
+            leaf2: '#0f5f4a',
+            coral: '#f0867a',
+            sand: '#f5f8f7'
+          },
+          fontFamily: { display: ['Inter', 'system-ui', 'sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+    @keyframes pop {
+      0%   { transform: scale(.92); opacity: 0; }
+      60%  { transform: scale(1.03); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(20,125,98,.35); }
+      50%      { box-shadow: 0 0 0 12px rgba(20,125,98,0); }
+    }
+
+    .anim-rise   { animation: rise .6s cubic-bezier(.2,.7,.2,1) both; }
+    .anim-fade   { animation: fadeIn .5s ease-out both; }
+    .anim-float  { animation: float 6s ease-in-out infinite; }
+    .anim-pop    { animation: pop .45s cubic-bezier(.2,.7,.2,1) both; }
+    .anim-glow   { animation: glow 2.2s ease-in-out infinite; }
+
+    .stagger > * { animation: rise .55s cubic-bezier(.2,.7,.2,1) both; }
+    .stagger > *:nth-child(1) { animation-delay: .05s; }
+    .stagger > *:nth-child(2) { animation-delay: .12s; }
+    .stagger > *:nth-child(3) { animation-delay: .19s; }
+    .stagger > *:nth-child(4) { animation-delay: .26s; }
+    .stagger > *:nth-child(5) { animation-delay: .33s; }
+
+    html { scroll-behavior: smooth; }
+
+    .card-enter { animation: rise .5s cubic-bezier(.2,.7,.2,1) both; }
+    .card-exit  { animation: fadeIn .3s ease-out reverse both; }
+
+    /* Opción seleccionada */
+    .opt:has(input:checked) {
+      border-color: #147d62;
+      background: linear-gradient(135deg, #e8fbf3 0%, #d6f5e6 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -12px rgba(20,125,98,.45);
+    }
+    .opt:has(input:checked) .opt-dot {
+      background-color: #147d62;
+      border-color: #147d62;
+      box-shadow: inset 0 0 0 4px #fff;
+    }
+
+    /* Barra de progreso animada */
+    .progress-fill {
+      transition: width .6s cubic-bezier(.2,.7,.2,1);
+      background: linear-gradient(90deg, #147d62, #4ed2a0, #147d62);
+      background-size: 200% 100%;
+      animation: shimmer 3s linear infinite;
+    }
+
+    /* Inputs */
+    input[type="number"], textarea {
+      transition: all .25s ease;
+    }
+    input[type="number"]:focus, textarea:focus {
+      background-color: #fff;
+    }
+
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5cf; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #147d62; }
+  </style>
+</head>
+<body class="bg-sand text-ink antialiased font-display">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+      <a href="/" class="text-2xl font-black tracking-tight">
+        Orienta<span class="text-leaf">U</span>
+      </a>
+      <span class="hidden text-sm text-slate-500 sm:block">Orientación académica personal</span>
+      <span class="rounded-full bg-mint/60 px-3 py-1 text-xs font-bold text-leaf2 sm:hidden">OrientaU</span>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-5 py-10 md:py-16">
+
+    <!-- HERO -->
+    <section class="anim-rise relative grid gap-10 overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-ink via-ink2 to-[#0b1f2b] px-7 py-12 text-white md:grid-cols-[1.1fr_.9fr] md:px-14 md:py-16">
+      <div class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-leaf/30 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-24 -left-16 h-72 w-72 rounded-full bg-coral/20 blur-3xl"></div>
+
+      <div class="relative">
+        <p class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm text-mint backdrop-blur">
+          <span class="h-2 w-2 animate-pulse rounded-full bg-mint"></span>
+          Una pausa para entender cómo vas
+        </p>
+        <h1 class="max-w-2xl text-4xl font-black leading-tight md:text-5xl">
+          Tu bienestar académico <span class="text-mint">también se puede planificar.</span>
+        </h1>
+        <p class="mt-5 max-w-xl leading-7 text-slate-300">
+          Responde con honestidad. Revisaremos hábitos, tiempo, aprendizaje y entorno para darte recomendaciones concretas y señales tempranas.
+        </p>
+        <a href="#evaluacion"
+           class="anim-glow mt-8 inline-flex items-center gap-2 rounded-xl bg-mint px-6 py-3 font-bold text-ink transition hover:-translate-y-0.5 hover:bg-white">
+          Comenzar evaluación
+          <span class="transition group-hover:translate-y-0.5">↓</span>
+        </a>
+      </div>
+
+      <div class="relative flex items-center">
+        <div class="anim-float w-full rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
+          <p class="text-sm font-semibold text-mint">¿Qué recibirás?</p>
+          <div class="mt-5 space-y-4">
+            <div class="flex gap-3">
+              <span class="text-mint">01</span>
+              <p>Un resumen visual de tus señales actuales.</p>
+            </div>
+            <div class="flex gap-3">
+              <span class="text-mint">02</span>
+              <p>Hallazgos con evidencia y pasos prácticos.</p>
+            </div>
+            <div class="flex gap-3">
+              <span class="text-mint">03</span>
+              <p>Gráficos y un reporte imprimible al final.</p>
+            </div>
+          </div>
+          <p class="mt-6 border-t border-white/10 pt-4 text-xs leading-5 text-slate-400">
+            Tus respuestas se procesan para mostrar el resultado y no se guardan en una base de datos.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EVALUACIÓN -->
+    <section id="evaluacion" class="pt-16">
+      <div class="anim-rise mb-8 flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-widest text-leaf">Evaluación</p>
+          <h2 class="mt-2 text-3xl font-black">Cuéntanos sobre tu situación</h2>
+          <p class="mt-2 max-w-xl text-slate-600">
+            Avanza tarjeta por tarjeta. Puedes volver atrás si necesitas corregir algo.
+          </p>
+        </div>
+        <span class="hidden rounded-full bg-white px-4 py-2 text-sm text-slate-500 shadow-sm md:block">
+          4 secciones · 18 preguntas
+        </span>
+      </div>
+
+      <!-- Los errores del backend se ocultan si estamos en modo paso a paso -->
+      {% if errores %}
+      <div id="backendErrors" class="anim-pop mb-6 rounded-2xl border border-red-200 bg-red-50 p-5 text-sm text-red-800">
+        <strong>Hay respuestas por revisar:</strong>
+        <ul class="mt-2 list-inside list-disc">
+          {% for error in errores %}<li>{{ error }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      <!-- Contenedor del flujo tipo tarjetas -->
+      <form method="post" id="quizForm" novalidate class="space-y-6">
+
+        <!-- Barra de progreso -->
+        <div class="sticky top-[64px] z-30 rounded-2xl border border-slate-200 bg-white/90 p-4 shadow-sm backdrop-blur">
+          <div class="flex items-center justify-between text-xs font-bold text-slate-500">
+            <span>Pregunta <span id="qCurrent">1</span> de <span id="qTotal">1</span></span>
+            <span id="qPercent">0%</span>
+          </div>
+          <div class="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
+            <div id="progressFill" class="progress-fill h-full w-0 rounded-full"></div>
+          </div>
+          <p id="qSection" class="mt-2 text-xs font-semibold uppercase tracking-wider text-leaf">Sección</p>
+        </div>
+
+        <!-- Tarjetas de preguntas -->
+        <div id="cardsWrap" class="space-y-4">
+          {% for nombre, preguntas in secciones %}
+            {% for clave, pregunta, tipo, datos, ayuda in preguntas %}
+            <fieldset
+              class="quiz-card hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-9"
+              data-section="{{ nombre }}"
+              data-key="{{ clave }}"
+              data-index="{{ loop.index0 if loop is defined else 0 }}">
+              <legend class="text-sm font-bold uppercase tracking-widest text-leaf">
+                {{ nombre }}
+              </legend>
+              <h3 class="mt-3 text-2xl font-black leading-snug md:text-3xl">
+                {{ pregunta }} <span class="text-coral">*</span>
+              </h3>
+              {% if ayuda %}<p class="mt-2 text-slate-500">{{ ayuda }}</p>{% endif %}
+
+              {% if tipo == 'numero' %}
+              <div class="mt-8">
+                <!-- ELIMINAMOS EL ATRIBUTO required PARA QUE NO BLOQUEE EL NAVEGADOR -->
+                <input id="{{ clave }}" name="{{ clave }}" type="number" step="any"
+                       min="{{ datos[0] }}" max="{{ datos[1] }}"
+                       value="{{ valores.get(clave,'') if valores else '' }}"
+                       placeholder="Ingresa un número"
+                       class="w-full rounded-2xl border-2 border-slate-200 bg-slate-50 px-5 py-4 text-lg font-semibold outline-none focus:border-leaf focus:ring-4 focus:ring-emerald-100">
+                <p class="mt-2 text-xs text-slate-400">Rango permitido: {{ datos[0] }} – {{ datos[1] }}</p>
+              </div>
+              {% else %}
+              <div class="mt-8 grid gap-3 sm:grid-cols-2">
+                {% for texto, valor in datos %}
+                <label class="opt flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-slate-200 bg-slate-50 px-4 py-4 transition hover:border-leaf hover:bg-emerald-50/60">
+                  <span class="opt-dot flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 border-slate-300 transition"></span>
+                  <!-- QUITAMOS required DE LOS RADIOS -->
+                  <input type="radio" name="{{ clave }}" value="{{ valor }}"
+                         {% if valores and valores.get(clave) == valor %}checked{% endif %}
+                         class="sr-only">
+                  <span class="font-semibold">{{ texto }}</span>
+                </label>
+                {% endfor %}
+              </div>
+              {% endif %}
+
+              <div class="mt-8 flex flex-wrap items-center justify-between gap-3">
+                <button type="button" class="btn-prev rounded-xl bg-slate-100 px-5 py-3 font-bold text-slate-600 transition hover:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-40">
+                  ← Anterior
+                </button>
+                <button type="button" class="btn-next rounded-xl bg-leaf px-6 py-3 font-bold text-white shadow-lg shadow-emerald-900/15 transition hover:-translate-y-0.5 hover:bg-leaf2">
+                  Siguiente →
+                </button>
+              </div>
+            </fieldset>
+            {% endfor %}
+          {% endfor %}
+
+          <!-- Tarjeta final: comentario -->
+          <fieldset class="quiz-card hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-9"
+                    data-section="Cierre" data-key="comentario" data-index="999">
+            <legend class="text-sm font-bold uppercase tracking-widest text-leaf">Cierre</legend>
+            <h3 class="mt-3 text-2xl font-black leading-snug md:text-3xl">
+              ¿Algo más que debamos considerar?
+            </h3>
+            <p class="mt-2 text-slate-500">
+              Puedes describir una dificultad o circunstancia. El sistema buscará menciones directas como falta de tiempo, problemas de descanso o dudas sobre un tema.
+            </p>
+            <textarea id="comentario" name="comentario" maxlength="2000" rows="5"
+                      placeholder="Escribe aquí si lo deseas…"
+                      class="mt-6 w-full rounded-2xl border-2 border-slate-200 bg-slate-50 px-5 py-4 outline-none focus:border-leaf focus:ring-4 focus:ring-emerald-100">{{ valores.get('comentario','') if valores else '' }}</textarea>
+            <p class="mt-2 text-xs text-slate-400">Opcional · máximo 2,000 caracteres.</p>
+
+            <div class="mt-8 flex flex-wrap items-center justify-between gap-3">
+              <button type="button" class="btn-prev rounded-xl bg-slate-100 px-5 py-3 font-bold text-slate-600 transition hover:bg-slate-200">
+                ← Anterior
+              </button>
+              <button type="submit"
+                      class="anim-glow rounded-xl bg-leaf px-7 py-4 font-bold text-white shadow-lg shadow-emerald-900/20 transition hover:-translate-y-0.5 hover:bg-leaf2">
+                Ver mi orientación →
+              </button>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Aviso -->
+        <div class="rounded-3xl bg-mint/60 p-6 text-sm leading-6 text-slate-700">
+          <strong class="text-ink">Nota:</strong> OrientaU ofrece orientación académica, no predice con certeza si aprobarás o reprobarás ni reemplaza apoyo docente o profesional.
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="mt-16 border-t border-slate-200 bg-white py-7 text-center text-sm text-slate-500">
+    OrientaU · Sistema experto de orientación académica
+  </footer>
+
+  <script>
+    (function () {
+      const form = document.getElementById('quizForm');
+      const cards = Array.from(document.querySelectorAll('.quiz-card'));
+      const total = cards.length;
+      let current = 0;
+
+      const qCurrent = document.getElementById('qCurrent');
+      const qTotal   = document.getElementById('qTotal');
+      const qPercent = document.getElementById('qPercent');
+      const qSection = document.getElementById('qSection');
+      const progress = document.getElementById('progressFill');
+      
+      // Elemento de referencia para hacer scroll preciso (la barra de progreso)
+      const progressBar = document.querySelector('.sticky.top-\\[64px\\]');
+      
+      // Ocultar errores del backend al inicio para que no confundan al usuario
+      const backendErrors = document.getElementById('backendErrors');
+      if (backendErrors) {
+          // Si hay errores, los ocultamos temporalmente. Si el usuario intenta enviar sin llenar, JS lo atrapará.
+          backendErrors.style.display = 'none';
+      }
+
+      qTotal.textContent = total;
+
+      function render() {
+        cards.forEach((c, i) => {
+          c.classList.toggle('hidden', i !== current);
+          if (i === current) {
+            c.classList.remove('card-enter');
+            void c.offsetWidth;
+            c.classList.add('card-enter');
+          }
+        });
+        qCurrent.textContent = current + 1;
+        qSection.textContent = cards[current].dataset.section || '';
+        const pct = Math.round(((current + 1) / total) * 100);
+        qPercent.textContent = pct + '%';
+        progress.style.width = pct + '%';
+      }
+
+      // Función para hacer scroll exacto a la tarjeta
+      function scrollToCard() {
+        if (progressBar) {
+          // Hacemos scroll tomando en cuenta la altura del menú sticky
+          const yOffset = -80; // Ajuste para que no quede pegado al techo
+          const y = progressBar.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }
+
+      function validateCard(card) {
+        const key = card.dataset.key;
+        if (key === 'comentario') return true;
+
+        const radios = card.querySelectorAll('input[type="radio"]');
+        if (radios.length) {
+          return Array.from(radios).some(r => r.checked);
+        }
+        const num = card.querySelector('input[type="number"]');
+        if (num) {
+          if (!num.value) return false;
+          const v = parseFloat(num.value);
+          const min = num.min !== '' ? parseFloat(num.min) : -Infinity;
+          const max = num.max !== '' ? parseFloat(num.max) : Infinity;
+          return !isNaN(v) && v >= min && v <= max;
+        }
+        return true;
+      }
+
+      cards.forEach(card => {
+        const next = card.querySelector('.btn-next');
+        const prev = card.querySelector('.btn-prev');
+
+        // Prevenir que al presionar "Enter" en un input de texto/número se envíe el form
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            if (next) next.click();
+          }
+        });
+
+        if (next) next.addEventListener('click', () => {
+          if (!validateCard(card)) {
+            card.classList.add('anim-pop');
+            setTimeout(() => card.classList.remove('anim-pop'), 500);
+            const first = card.querySelector('input');
+            if (first) first.focus();
+            return;
+          }
+          if (current < total - 1) {
+            current++;
+            render();
+            scrollToCard();
+          }
+        });
+
+        if (prev) prev.addEventListener('click', () => {
+          if (current > 0) {
+            current--;
+            render();
+            scrollToCard();
+          }
+        });
+
+        // Auto-avance al elegir una opción de radio
+        card.querySelectorAll('input[type="radio"]').forEach(r => {
+          r.addEventListener('change', () => {
+            setTimeout(() => {
+              const n = card.querySelector('.btn-next');
+              if (n) n.click();
+            }, 260);
+          });
+        });
+      });
+
+      // Validar todo antes de enviar al backend
+      form.addEventListener('submit', function(e) {
+        let allValid = true;
+        for (let i = 0; i < total - 1; i++) { // Omitimos el último que es el comentario
+          if (!validateCard(cards[i])) {
+            allValid = false;
+            current = i; // Ir a la tarjeta que falta
+            render();
+            scrollToCard();
+            cards[i].classList.add('anim-pop');
+            setTimeout(() => cards[i].classList.remove('anim-pop'), 500);
+            break;
+          }
+        }
+        
+        if (!allValid) {
+          e.preventDefault(); // Detener el envío
+        }
+      });
+
+      render();
+      // Si hay errores del backend, hacemos scroll a la primera tarjeta por si acaso
+      if (backendErrors) {
+        scrollToCard();
+      }
+    })();
+  </script>
+</body>
+</html>
