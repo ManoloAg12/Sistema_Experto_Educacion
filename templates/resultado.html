@@ -32,10 +32,6 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
-    @keyframes drawBar {
-      from { transform: scaleX(0); }
-      to   { transform: scaleX(1); }
-    }
     @keyframes float {
       0%,100% { transform: translateY(0) }
       50%     { transform: translateY(-6px) }
@@ -70,7 +66,7 @@
       animation: shimmer 3s linear infinite;
     }
 
-    /* Impresión */
+    /* Estilos para cuando se imprima el reporte */
     @media print {
       .no-print { display: none !important; }
       body { background: #fff !important; color: #000 !important; }
@@ -78,6 +74,7 @@
         border: 1px solid #ddd !important;
         box-shadow: none !important;
         break-inside: avoid;
+        margin-bottom: 1rem;
       }
       .print-dark {
         background: #f2f6f4 !important;
@@ -97,13 +94,13 @@
 </head>
 <body class="bg-sand text-ink antialiased font-display">
 
+  <!-- Header -->
   <header class="no-print sticky top-0 z-40 border-b border-slate-200/80 bg-white/80 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
       <a href="/" class="text-2xl font-black tracking-tight">Orienta<span class="text-leaf">U</span></a>
       <span class="hidden text-sm text-slate-500 sm:block">Tu resumen personal</span>
       <div class="flex items-center gap-2">
-        <button onclick="window.print()"
-                class="rounded-xl bg-ink px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-ink2">
+        <button onclick="window.print()" class="rounded-xl bg-ink px-4 py-2 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-ink2">
           Imprimir reporte
         </button>
       </div>
@@ -122,7 +119,7 @@
     <!-- Índice + panel -->
     <section class="anim-rise mt-8 grid gap-5 md:grid-cols-[1.15fr_.85fr]" style="animation-delay:.08s">
 
-      <!-- Índice -->
+      <!-- Índice orientativo -->
       <div class="print-card print-dark rounded-3xl bg-gradient-to-br from-ink via-ink2 to-[#0b1f2b] p-7 text-white md:p-9">
         <div class="flex items-start justify-between gap-4">
           <div>
@@ -177,7 +174,7 @@
 
       <div class="grid gap-5 md:grid-cols-2">
 
-        <!-- Barras: señales -->
+        <!-- Gráfico de Barras: Señales -->
         <div class="print-card chart-wrap rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <p class="text-sm font-bold uppercase tracking-widest text-leaf">Señales declaradas</p>
           <p class="mt-1 text-sm text-slate-500">Horas y porcentaje por indicador.</p>
@@ -186,7 +183,7 @@
           </div>
         </div>
 
-        <!-- Pastel: distribución de hallazgos por nivel -->
+        <!-- Gráfico de Pastel: Nivel de hallazgos -->
         <div class="print-card chart-wrap rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <p class="text-sm font-bold uppercase tracking-widest text-leaf">Nivel de hallazgos</p>
           <p class="mt-1 text-sm text-slate-500">Distribución por severidad detectada.</p>
@@ -197,7 +194,7 @@
       </div>
     </section>
 
-    <!-- Hallazgos -->
+    <!-- Hallazgos (DIAGNÓSTICOS Y CERTEZA) -->
     <section class="mt-10">
       <div class="mb-5 flex items-end justify-between">
         <div>
@@ -212,15 +209,22 @@
         <article class="print-card rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md md:p-7">
           <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p class="text-sm font-semibold text-slate-500">{{ r.area }} · {{ r.tipo }}</p>
-              <h3 class="mt-1 text-xl font-extrabold">{{ r.titulo }}</h3>
+              <p class="text-sm font-semibold text-slate-500">{{ r.cluster }} · {{ r.reglas | join(', ') }}</p>
+              <h3 class="mt-1 text-xl font-extrabold">{{ r.nombre }}</h3>
             </div>
-            <span class="rounded-full px-4 py-2 text-sm font-bold
-              {% if r.nivel == 'Alto' %}bg-red-100 text-red-800
-              {% elif r.nivel == 'Medio' %}bg-amber-100 text-amber-900
-              {% else %}bg-sky-100 text-sky-900{% endif %}">
-              {{ r.nivel }}
-            </span>
+            
+            <!-- ETIQUETA DE CERTEZA -->
+            <div class="flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2">
+                <span class="text-sm font-bold text-slate-500">Certeza:</span>
+                <span class="text-lg font-black {% if r.certeza >= 0.8 %}text-leaf{% elif r.certeza >= 0.6 %}text-amber-500{% else %}text-slate-500{% endif %}">
+                    {{ (r.certeza * 100) | round | int }}%
+                </span>
+            </div>
+          </div>
+
+          <!-- BARRA DE PROGRESO DE CERTEZA -->
+          <div class="mt-4 h-2 w-full overflow-hidden rounded-full bg-slate-100">
+            <div class="h-full rounded-full {% if r.certeza >= 0.8 %}bg-leaf{% elif r.certeza >= 0.6 %}bg-amber-400{% else %}bg-slate-400{% endif %}" style="width: {{ r.certeza * 100 }}%"></div>
           </div>
 
           <p class="mt-5 leading-7 text-slate-700">{{ r.conclusion }}</p>
@@ -240,8 +244,11 @@
           </ul>
           {% endif %}
 
-          <p class="mt-5 border-t border-slate-100 pt-4 text-xs text-slate-500">
-            Señales consideradas: {{ r.evidencia|join(', ')|replace('_',' ') }}
+          <p class="mt-5 border-t border-slate-100 pt-4 text-xs text-slate-500 flex flex-wrap gap-1">
+            Señales consideradas: 
+            {% for k, v in r.condiciones_evaluadas.items() %}
+                <span class="bg-slate-100 px-2 py-1 rounded text-slate-600 font-semibold">{{ k | replace('_', ' ') }}: {{ v }}</span>{% if not loop.last %}, {% endif %}
+            {% endfor %}
           </p>
         </article>
         {% endfor %}
@@ -288,8 +295,7 @@
       <a href="/" class="rounded-xl bg-leaf px-7 py-4 font-bold text-white transition hover:-translate-y-0.5 hover:bg-leaf2">
         Realizar otra evaluación
       </a>
-      <button onclick="window.print()"
-              class="rounded-xl border-2 border-ink px-7 py-4 font-bold text-ink transition hover:-translate-y-0.5 hover:bg-ink hover:text-white">
+      <button onclick="window.print()" class="rounded-xl border-2 border-ink px-7 py-4 font-bold text-ink transition hover:-translate-y-0.5 hover:bg-ink hover:text-white">
         Imprimir reporte
       </button>
     </div>
@@ -299,6 +305,7 @@
     OrientaU · Tus datos no se guardan automáticamente
   </footer>
 
+  <!-- SCRIPTS DE ANIMACIÓN Y GRÁFICOS -->
   <script>
     // Animación del índice (contador)
     (function () {
@@ -314,25 +321,27 @@
       }, 30);
     })();
 
-    // Datos para gráficos
+    // Datos para gráficos inyectados desde Jinja
     const data = {
       senales: {
-        labels: ['Descanso (h)', 'Trabajo (h)', 'Estudio extra (h)', 'Asistencia (%)'],
+        labels: ['Descanso (h)', 'Trabajo (h)', 'Estudio extra (h)', 'Asistencia'],
         values: [
           Number('{{ hechos["horas_sueno"] }}') || 0,
           Number('{{ hechos["horas_trabajo_semanal"] }}') || 0,
           Number('{{ hechos["horas_estudio_extra"] }}') || 0,
-          Number('{{ hechos["asistencia_clases"] }}') || 0
+          // La asistencia suele ser texto ("alta", "baja"), así que la mapeamos a número para el gráfico
+          '{{ hechos["asistencia_clases"] }}' === 'alta' ? 100 : ('{{ hechos["asistencia_clases"] }}' === 'irregular' ? 60 : 30)
         ]
       },
       niveles: {
-        alto:  {{ resultados | selectattr('nivel','equalto','Alto') | list | length }},
-        medio: {{ resultados | selectattr('nivel','equalto','Medio') | list | length }},
-        bajo:  {{ resultados | selectattr('nivel','equalto','Bajo') | list | length }}
+        // Contamos cuántas reglas cayeron en cada rango de certeza
+        alto:  {{ resultados | selectattr('certeza', 'ge', 0.80) | list | length }},
+        medio: {{ resultados | selectattr('certeza', 'ge', 0.60) | rejectattr('certeza', 'ge', 0.80) | list | length }},
+        bajo:  {{ resultados | rejectattr('certeza', 'ge', 0.60) | list | length }}
       }
     };
 
-    // Barras
+    // Gráfico de Barras
     const ctxBar = document.getElementById('barChart');
     if (ctxBar) {
       new Chart(ctxBar, {
@@ -354,44 +363,29 @@
           animation: { duration: 1200, easing: 'easeOutCubic' },
           plugins: {
             legend: { display: false },
-            tooltip: {
-              backgroundColor: '#172c3b',
-              padding: 12,
-              cornerRadius: 10,
-              titleFont: { weight: 'bold' }
-            }
+            tooltip: { backgroundColor: '#172c3b', padding: 12, cornerRadius: 10 }
           },
           scales: {
-            y: {
-              beginAtZero: true,
-              grid: { color: 'rgba(0,0,0,.06)' },
-              ticks: { color: '#64748b' }
-            },
-            x: {
-              grid: { display: false },
-              ticks: { color: '#334155', font: { weight: '600' } }
-            }
+            y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,.06)' }, ticks: { color: '#64748b' } },
+            x: { grid: { display: false }, ticks: { color: '#334155', font: { weight: '600' } } }
           }
         }
       });
     }
 
-    // Pastel
+    // Gráfico de Pastel
     const ctxPie = document.getElementById('pieChart');
     if (ctxPie) {
       const totalNiv = data.niveles.alto + data.niveles.medio + data.niveles.bajo;
       const hasData = totalNiv > 0;
+      
       new Chart(ctxPie, {
         type: 'doughnut',
         data: {
-          labels: hasData ? ['Alto', 'Medio', 'Bajo'] : ['Sin hallazgos'],
+          labels: hasData ? ['Alta certeza (>=80%)', 'Media (60-79%)', 'Baja (<60%)'] : ['Sin hallazgos'],
           datasets: [{
-            data: hasData
-              ? [data.niveles.alto, data.niveles.medio, data.niveles.bajo]
-              : [1],
-            backgroundColor: hasData
-              ? ['#ef4444', '#f59e0b', '#0ea5e9']
-              : ['#c9f2df'],
+            data: hasData ? [data.niveles.alto, data.niveles.medio, data.niveles.bajo] : [1],
+            backgroundColor: hasData ? ['#147d62', '#fbbf24', '#cbd5e1'] : ['#c9f2df'],
             borderWidth: 3,
             borderColor: '#fff',
             hoverOffset: 10
@@ -403,20 +397,8 @@
           cutout: '62%',
           animation: { animateRotate: true, animateScale: true, duration: 1300 },
           plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                padding: 16,
-                font: { weight: '600' },
-                usePointStyle: true,
-                pointStyle: 'circle'
-              }
-            },
-            tooltip: {
-              backgroundColor: '#172c3b',
-              padding: 12,
-              cornerRadius: 10
-            }
+            legend: { position: 'bottom', labels: { padding: 16, font: { weight: '600' }, usePointStyle: true, pointStyle: 'circle' } },
+            tooltip: { backgroundColor: '#172c3b', padding: 12, cornerRadius: 10 }
           }
         }
       });

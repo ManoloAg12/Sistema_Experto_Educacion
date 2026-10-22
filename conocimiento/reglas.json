@@ -1,31 +1,18 @@
 {
   "variables_esperadas": [
-    "horas_estudio_extra",
-    "horas_trabajo_semanal",
-    "horas_sueno",
-    "asistencia_clases",
-    "comprension_clase",
-    "bloqueo_examenes",
-    "metodo_estudio",
-    "tipo_materia_reprobada",
-    "entrega_trabajos",
-    "entorno_estudio",
-    "consulta_dudas",
-    "trabajo_equipo",
-    "nivel_motivacion",
-    "dominio_prerrequisitos",
-    "uso_herramientas_ia",
-    "revision_errores",
-    "estabilidad_financiera",
-    "tiempo_transporte",
-    "sin_internet",
-    "otros_con_internet"
+    "horas_estudio_extra", "horas_trabajo_semanal", "horas_sueno", "asistencia_clases",
+    "comprension_clase", "bloqueo_examenes", "metodo_estudio", "tipo_materia_reprobada",
+    "entrega_trabajos", "entorno_estudio", "consulta_dudas", "trabajo_equipo",
+    "nivel_motivacion", "dominio_prerrequisitos", "uso_herramientas_ia",
+    "revision_errores", "estabilidad_financiera", "tiempo_transporte",
+    "sin_internet", "otros_con_internet"
   ],
   "reglas": [
     {
       "id": "R01_A",
       "cluster": "Gestion del tiempo",
       "nombre": "Sobrecarga por trabajo y descanso insuficiente",
+      "certeza": 0.85,
       "condiciones": {
         "horas_trabajo_semanal": ">=40",
         "horas_sueno": "<5",
@@ -38,6 +25,7 @@
       "id": "R01_B",
       "cluster": "Gestion del tiempo",
       "nombre": "Dificultades asociadas al transporte",
+      "certeza": 0.80,
       "condiciones": {
         "horas_trabajo_semanal": "==0",
         "tiempo_transporte": ">3",
@@ -50,6 +38,7 @@
       "id": "R01_C",
       "cluster": "Gestion del tiempo",
       "nombre": "Organizacion insuficiente del tiempo de estudio",
+      "certeza": 0.90,
       "condiciones": {
         "horas_trabajo_semanal": "==0",
         "horas_estudio_extra": "<5",
@@ -62,6 +51,7 @@
       "id": "R02_A",
       "cluster": "Metodos de estudio",
       "nombre": "Practica insuficiente en matematicas",
+      "certeza": 0.75,
       "condiciones": {
         "tipo_materia_reprobada": "matematicas",
         "metodo_estudio": "lectura_memorizacion",
@@ -74,6 +64,7 @@
       "id": "R02_B",
       "cluster": "Metodos de estudio",
       "nombre": "Practica insuficiente en programacion",
+      "certeza": 0.75,
       "condiciones": {
         "tipo_materia_reprobada": "programacion",
         "metodo_estudio": "lectura_memorizacion",
@@ -86,6 +77,7 @@
       "id": "R02_C",
       "cluster": "Metodos de estudio",
       "nombre": "Dependencia de herramientas de IA",
+      "certeza": 0.80,
       "condiciones": {
         "uso_herramientas_ia": "alto",
         "bloqueo_examenes": "si",
@@ -98,6 +90,7 @@
       "id": "R03_A",
       "cluster": "Conocimientos previos",
       "nombre": "Posibles vacios en conocimientos fundamentales",
+      "certeza": 0.95,
       "condiciones": {
         "dominio_prerrequisitos": "bajo",
         "horas_estudio_extra": ">15",
@@ -110,6 +103,7 @@
       "id": "R03_B",
       "cluster": "Conocimientos previos",
       "nombre": "Falta de revision de errores",
+      "certeza": 0.85,
       "condiciones": {
         "revision_errores": "nunca",
         "comprension_clase": "baja"
@@ -121,6 +115,7 @@
       "id": "R04_A",
       "cluster": "Trabajo en equipo",
       "nombre": "Sobrecarga de responsabilidades grupales",
+      "certeza": 0.80,
       "condiciones": {
         "trabajo_equipo": "asume_toda_carga",
         "entrega_trabajos": "a_tiempo",
@@ -133,6 +128,7 @@
       "id": "R04_B",
       "cluster": "Trabajo en equipo",
       "nombre": "Dificultades de coordinacion grupal",
+      "certeza": 0.90,
       "condiciones": {
         "trabajo_equipo": "conflictivo",
         "consulta_dudas": "nunca",
@@ -145,6 +141,7 @@
       "id": "R05_A",
       "cluster": "Evaluacion y motivacion",
       "nombre": "Dificultades durante los examenes",
+      "certeza": 0.75,
       "condiciones": {
         "bloqueo_examenes": "si",
         "comprension_clase": "alta",
@@ -157,6 +154,7 @@
       "id": "R05_B",
       "cluster": "Evaluacion y motivacion",
       "nombre": "Baja motivacion y asistencia",
+      "certeza": 0.85,
       "condiciones": {
         "nivel_motivacion": "nula",
         "asistencia_clases": "baja",
@@ -169,6 +167,7 @@
       "id": "R06_A",
       "cluster": "Factores socioeconomicos",
       "nombre": "Presion economica y responsabilidades laborales",
+      "certeza": 0.80,
       "condiciones": {
         "estabilidad_financiera": "precaria",
         "horas_trabajo_semanal": ">30",
@@ -181,6 +180,7 @@
       "id": "R07_A",
       "cluster": "Planificacion de proyectos",
       "nombre": "Dificultades para priorizar requisitos",
+      "certeza": 0.85,
       "condiciones": {
         "entrega_trabajos": "incompletos_por_tiempo",
         "comprension_clase": "alta",
@@ -193,6 +193,7 @@
       "id": "R08_A",
       "cluster": "Entorno de estudio",
       "nombre": "Entorno con interrupciones",
+      "certeza": 0.90,
       "condiciones": {
         "entorno_estudio": "ruidoso_o_compartido",
         "horas_estudio_extra": ">15",
@@ -205,6 +206,7 @@
       "id": "R08_B",
       "cluster": "Conectividad",
       "nombre": "Problema de conexión general",
+      "certeza": 0.95,
       "condiciones": {
         "sin_internet": true,
         "otros_con_internet": false
