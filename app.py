@@ -65,8 +65,11 @@ def inicio():
         else:
             hechos[clave] = valor
     comentario = request.form.get("comentario", "").strip()[:2000]
+    
     if errores:
-        return render_template("inicio.html", secciones=SECCIONES, errores=errores, valores=request.form), 400
+        # Eliminamos el ", 400" para que la terminal no marque error y la vista fluya
+        return render_template("inicio.html", secciones=SECCIONES, errores=errores, valores=request.form)
+        
     resultados = evaluar_perfil(hechos)
     contexto = analizar_comentario(comentario)
     indice = puntuacion_riesgo(hechos)
