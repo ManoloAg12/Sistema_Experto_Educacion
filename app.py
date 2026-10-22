@@ -1,10 +1,13 @@
 """Portal web OrientaU. Ejecutar con: python3 app.py"""
 from flask import Flask, render_template, request
 from cuestionario import SECCIONES
-from evaluacion import evaluar_perfil
+from motor import MotorInferencia  # <-- Importamos tu motor directamente
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "orientau-local-session"
+
+# Instanciamos el motor una sola vez
+motor = MotorInferencia()
 
 NUMERICAS = {clave: datos for _, preguntas in SECCIONES for clave, _, tipo, datos, _ in preguntas if tipo == "numero"}
 OPCIONES = {clave: dict(datos) for _, preguntas in SECCIONES for clave, _, tipo, datos, _ in preguntas if tipo == "opcion"}
@@ -67,13 +70,16 @@ def inicio():
     comentario = request.form.get("comentario", "").strip()[:2000]
     
     if errores:
-        # Eliminamos el ", 400" para que la terminal no marque error y la vista fluya
         return render_template("inicio.html", secciones=SECCIONES, errores=errores, valores=request.form)
         
-    resultados = evaluar_perfil(hechos)
+    # --- AQUÍ ESTÁ EL CAMBIO PRINCIPAL ---
+    # Usamos el motor directamente en lugar de la función evaluar_perfil
+    resultados = motor.evaluar(hechos) 
+    
     contexto = analizar_comentario(comentario)
     indice = puntuacion_riesgo(hechos)
     nivel = "Atención prioritaria" if indice >= 55 else "Conviene atender algunos factores" if indice >= 30 else "Señales favorables"
+    
     return render_template("resultado.html", resultados=resultados, hechos=hechos,
                            comentario=comentario, contexto=contexto, indice=indice, nivel=nivel)
 
