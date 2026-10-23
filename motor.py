@@ -32,12 +32,22 @@ class MotorInferencia:
             if not isinstance(regla, dict):
                 raise ValueError(f"La regla {indice} debe ser un objeto.")
 
-            for campo in ("id", "condiciones", "conclusion", "recomendacion"):
-                if campo not in regla:
-                    raise ValueError(f"La regla {indice} no contiene el campo '{campo}'.")
+            # Validar ID
+            if "id" not in regla:
+                raise ValueError(f"La regla {indice} no contiene el campo 'id'.")
 
-            if not isinstance(regla["condiciones"], dict) or not regla["condiciones"]:
-                raise ValueError(f"La regla {indice} debe tener condiciones no vacías.")
+            # Validar bloque de condiciones (Soporta 'condiciones' o 'si')
+            condiciones = regla.get("condiciones") or regla.get("si")
+            if not isinstance(condiciones, dict) or not condiciones:
+                raise ValueError(f"La regla {indice} debe tener el campo 'condiciones' o 'si' no vacío.")
+
+            # Validar bloque de conclusiones (Soporta estructura directa o dentro de 'entonces')
+            if "entonces" in regla:
+                if "conclusion" not in regla["entonces"] or "recomendacion" not in regla["entonces"]:
+                    raise ValueError(f"La regla {indice} tiene bloque 'entonces' pero le falta 'conclusion' o 'recomendacion'.")
+            else:
+                if "conclusion" not in regla or "recomendacion" not in regla:
+                    raise ValueError(f"La regla {indice} no contiene 'conclusion' ni 'recomendacion'.")
 
             if regla["id"] in ids:
                 raise ValueError(f"ID de regla duplicado: {regla['id']}")
@@ -82,11 +92,11 @@ class MotorInferencia:
         if not isinstance(hechos, dict):
             raise TypeError("Los hechos deben proporcionarse como un diccionario.")
 
-        # Usaremos un diccionario para agrupar conclusiones idénticas y combinar sus certezas
         conclusiones_agrupadas = {}
 
         for regla in self.base_conocimiento["reglas"]:
-            condiciones = regla["condiciones"]
+            # Obtener las premisas (ya sea del campo 'condiciones' o 'si')
+            condiciones = regla.get("condiciones") or regla.get("si")
 
             cumplida = all(
                 variable in hechos and self._comparar(hechos[variable], condicion)
@@ -94,9 +104,15 @@ class MotorInferencia:
             )
 
             if cumplida:
-                # Obtenemos la certeza de la regla (por defecto 0.90 si no está en el JSON)
                 fc_regla = float(regla.get("certeza", 0.90))
-                conclusion = regla["conclusion"]
+                
+                # Obtener la conclusión y recomendación (directa o desde el bloque 'entonces')
+                if "entonces" in regla:
+                    conclusion = regla["entonces"]["conclusion"]
+                    recomendacion = regla["entonces"]["recomendacion"]
+                else:
+                    conclusion = regla["conclusion"]
+                    recomendacion = regla["recomendacion"]
 
                 if conclusion in conclusiones_agrupadas:
                     # Fórmula de Combinación de MYCIN para dos evidencias positivas
@@ -108,17 +124,16 @@ class MotorInferencia:
                 else:
                     # Primera vez que vemos esta conclusión
                     conclusiones_agrupadas[conclusion] = {
-                        "id_regla": regla["id"], # Guardamos la principal
+                        "id_regla": regla["id"],
                         "reglas": [regla["id"]],
                         "cluster": regla.get("cluster", "General"),
                         "nombre": regla.get("nombre", "Diagnóstico general"),
                         "conclusion": conclusion,
-                        "recomendacion": regla["recomendacion"],
+                        "recomendacion": recomendacion,
                         "certeza": fc_regla,
                         "condiciones_evaluadas": condiciones.copy(),
                     }
 
-        # Convertimos el diccionario a una lista y lo ordenamos por certeza de mayor a menor
         resultados = list(conclusiones_agrupadas.values())
         resultados.sort(key=lambda x: x["certeza"], reverse=True)
 
