@@ -1,0 +1,50 @@
+{
+    "sistema": "Sistema Experto de Reparación de Computadoras",
+    "reglas": [
+        {
+            "id": "R1",
+            "si": [
+                "el equipo no hace ningún ruido",
+                "no enciende ninguna luz indicadora",
+                "los ventiladores no giran"
+            ],
+            "entonces": "Falla de energía: Verifique que el cable de alimentación esté bien conectado al tomacorriente y a la PC. Si está correcto, es muy probable que la fuente de poder esté dañada y deba reemplazarse."
+        },
+        {
+            "id": "R2",
+            "si": [
+                "el equipo enciende (hay ruido de ventiladores y luces)",
+                "la pantalla permanece completamente negra",
+                "la placa base emite pitidos (beeps) al arrancar"
+            ],
+            "entonces": "Problema de memoria RAM: Desconecte la PC, retire los módulos de memoria RAM, limpie los contactos (puede usar una goma de borrar) y vuelva a instalarlos asegurándose de que hagan 'clic'."
+        },
+        {
+            "id": "R3",
+            "si": [
+                "el equipo enciende normalmente",
+                "el monitor muestra el mensaje 'Sin señal' (No signal)",
+                "la luz del monitor está en color naranja o parpadeando"
+            ],
+            "entonces": "Problema de conexión de video: Verifique que el cable de video (HDMI, DisplayPort o VGA) esté firmemente conectado tanto en el monitor como en la tarjeta de video correcta de la computadora."
+        },
+        {
+            "id": "R4",
+            "si": [
+                "el equipo enciende y da imagen",
+                "el sistema se apaga repentinamente después de unos minutos de uso",
+                "los ventiladores suenan muy fuerte o el equipo está muy caliente"
+            ],
+            "entonces": "Sobrecalentamiento del procesador (CPU): Abra el equipo y limpie el polvo de los ventiladores. Si el problema persiste, es necesario reemplazar la pasta térmica del procesador."
+        },
+        {
+            "id": "R5",
+            "si": [
+                "el equipo enciende y da video",
+                "muestra el logo de la marca",
+                "aparece una pantalla negra con el mensaje 'No bootable device' o 'Operating system not found'"
+            ],
+            "entonces": "Fallo en la unidad de almacenamiento: El sistema no detecta el disco duro o SSD. Abra el equipo y revise los cables de conexión (SATA/Energía) del disco. Si están bien, el disco podría estar dañado o el sistema operativo corrupto."
+        }
+    ]
+}

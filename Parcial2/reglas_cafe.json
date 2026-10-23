@@ -1,0 +1,48 @@
+{
+    "sistema": "Sistema Experto Agrícola para el Cultivo de Café",
+    "reglas": [
+        {
+            "id": "R1",
+            "si": [
+                "la hoja presenta manchas amarillentas o pálidas en la parte de arriba",
+                "hay un polvillo anaranjado (como polvo de ladrillo) en la parte de abajo (envés) de la hoja"
+            ],
+            "entonces": "Roya del cafeto: Avise al técnico para indicar el control adecuado. Se recomienda regular la sombra para que entre aire y no retenga humedad. A futuro, renueve con variedades resistentes."
+        },
+        {
+            "id": "R2",
+            "si": [
+                "las hojas tienen manchas redondas color café grisáceo (como perforadas con máquina)",
+                "en algunos casos el centro de la mancha se seca y se cae dejando un agujero",
+                "la plantación tiene mucha sombra y ha llovido mucho"
+            ],
+            "entonces": "Ojo de gallo: El hongo prolifera por exceso de humedad. Se recomienda podar y regular los árboles de sombra para que la planta se ventile y se seque más rápido después de la lluvia."
+        },
+        {
+            "id": "R3",
+            "si": [
+                "las hojas están amarillas de forma pareja (del mismo tono)",
+                "las hojas no presentan manchas ni polvillo",
+                "el amarillamiento afecta a las hojas más viejas (las de abajo de la rama)"
+            ],
+            "entonces": "Falta de nitrógeno: No es una enfermedad, la planta tiene hambre y consume sus hojas viejas para alimentar las nuevas. Se recomienda aplicar fertilizante."
+        },
+        {
+            "id": "R4",
+            "si": [
+                "las hojas tienen manchas color café con formas irregulares (parecen caminos o túneles)",
+                "las hojas dañadas se secan y se caen fácilmente",
+                "es época seca (verano)"
+            ],
+            "entonces": "Minador de la hoja: Una larva se está comiendo el interior de la hoja. Se recomienda revisar la plantación, contar cuántas hojas dañadas hay y reportarlo al técnico para decidir el control."
+        },
+        {
+            "id": "R5",
+            "si": [
+                "el fruto del cafeto tiene un agujerito pequeñito y redondo en la corona",
+                "al partir el fruto a la mitad, el grano está perforado, dañado o con polvillo en su interior"
+            ],
+            "entonces": "Ataque de broca: Se recomienda recoger los frutos del suelo y realizar una buena 'repela' (quitar frutos sobrantes de la mata tras la cosecha) para que la plaga no pase a la siguiente cosecha, y usar trampas con atrayentes."
+        }
+    ]
+}
